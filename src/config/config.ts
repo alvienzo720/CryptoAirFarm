@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 
 export const ConfigParams = {
     INFURA_PROJECT_URL:process.env.INFURA_PROJECT_URL || "",
+    BOT_TOKEN:process.env.BOT_TOKEN || "",
 }
 
 export const PRIVATE_KEYS = process.env.PRIVATE_KEYS?.split(',').filter(Boolean) || [];
