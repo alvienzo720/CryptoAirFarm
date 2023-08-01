@@ -4,7 +4,7 @@ import { ConfigParams } from "../config";
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
 
 bot.start((ctx) => {
-   ctx.reply("Select an account", Markup.inlineKeyboard([
+   ctx.reply("Select a Network to Use", Markup.inlineKeyboard([
       [Markup.button.callback('Ethereum', 'ethereum')],
         [Markup.button.callback('Abitrum', 'abitrum')],
         [Markup.button.callback('Optimism', 'optimism')],
@@ -42,7 +42,6 @@ bot.action('optimism', (ctx) => {
     ]));
 });
 
-
 bot.action('polygon', (ctx) => {
     ctx.reply("You chose Polygon! Select a token", Markup.inlineKeyboard([
         [Markup.button.callback('Swap MAT for UNI', 'ethtouni')],
@@ -52,7 +51,5 @@ bot.action('polygon', (ctx) => {
         [Markup.button.callback('Swap MAT to BNB', 'unitoeth')]
     ]));
 });
-
-
 
 export {bot}
