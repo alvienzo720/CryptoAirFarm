@@ -1,10 +1,12 @@
 import { Markup, Telegraf } from "telegraf";
-import { ConfigParams } from "../config";
+import { ConfigParams, PRIVATE_KEYS } from "../config";
+import { walletBalance } from "../controllers";
 
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
 
 bot.start((ctx) => {
    ctx.reply("Select a Network to Use", Markup.inlineKeyboard([
+    [Markup.button.callback('Accounts Balances', 'balances')],
       [Markup.button.callback('Ethereum', 'ethereum')],
         [Markup.button.callback('Abitrum', 'abitrum')],
         [Markup.button.callback('Optimism', 'optimism')],
@@ -51,5 +53,14 @@ bot.action('polygon', (ctx) => {
         [Markup.button.callback('Swap MAT to BNB', 'unitoeth')]
     ]));
 });
+
+bot.action('balances', async (ctx) =>{
+    try {
+        await walletBalance(PRIVATE_KEYS)
+    } catch (error) {
+        console.log(error);
+        
+    }
+})
 
 export {bot}

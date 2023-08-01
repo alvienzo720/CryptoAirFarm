@@ -1,5 +1,6 @@
 import { ethers } from "ethers"
-import { PRIVATE_KEYS, provider } from "../config/config"
+import {  provider } from "../config/config"
+import { sendMessage } from "../utils/telegram";
 
 export const walletBalance = async (keys:string[]) => {
     try {
@@ -7,11 +8,12 @@ export const walletBalance = async (keys:string[]) => {
          const wallet =  new ethers.Wallet(keys[i], provider)
         const balance = await wallet.getBalance();
         const readableBalance =  parseFloat(ethers.utils.formatEther(balance)).toFixed(4);
-        console.log(`Balance Account ${i + 1}`, readableBalance);
-        console.log("---------------");   
-        }
-        console.log("Keys", PRIVATE_KEYS.length)
-        
+        // console.log(`Balance Account ${i + 1}`, readableBalance);
+        let message = `Balance Account ${i + 1}: ||  ${readableBalance} ETH`;
+
+        sendMessage(message)
+        // console.log("---------------");   
+        }        
     } catch (error) {
         console.log("An Error Occured: ", error);
         
