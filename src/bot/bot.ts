@@ -1,6 +1,8 @@
 import { Markup, Telegraf } from "telegraf";
-import { ConfigParams, PRIVATE_KEYS } from "../config";
+import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, provider, wallet } from "../config";
 import { walletBalance } from "../controllers";
+import { swapTokens } from "../controllers/swapTokens";
+import { ethers } from "ethers";
 
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
 
@@ -59,6 +61,16 @@ bot.action('balances', async (ctx) =>{
         await walletBalance(PRIVATE_KEYS)
     } catch (error) {
         console.log(error);
+        
+    }
+})
+
+bot.action('ethtouni', async(ctx) => {
+    try {
+         const wallet = new ethers.Wallet(UniswapConfigs.privateKey, provider);
+        await swapTokens(provider, wallet,UniswapConfigs.tokenIn, UniswapConfigs.tokenOut,ethers.utils.parseEther('0.000001'));
+    } catch (error) {
+        console.log(error)
         
     }
 })
