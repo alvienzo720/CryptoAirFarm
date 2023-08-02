@@ -1,7 +1,7 @@
 import { Markup, Telegraf } from "telegraf";
-import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, provider, wallet } from "../config";
+import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, uniSwapprovider, wallet } from "../config";
 import { walletBalance } from "../controllers";
-import { swapTokens } from "../controllers/swapTokens";
+import { swapTokens } from "../controllers/swapTokensUniswap";
 import { ethers } from "ethers";
 
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
@@ -66,7 +66,7 @@ bot.action('balances', async (ctx) =>{
 
 bot.action('wethtouni', async(ctx) => {
     try {
-        await swapTokens(provider, wallet,UniswapConfigs.WETH, UniswapConfigs.UNI,ethers.utils.parseEther('0.000001'));
+        await swapTokens(uniSwapprovider, wallet,UniswapConfigs.WETH, UniswapConfigs.UNI,ethers.utils.parseEther('0.000001'));
     } catch (error) {
         console.log(error)
         
@@ -76,7 +76,7 @@ bot.action('wethtouni', async(ctx) => {
 
 bot.action('wethtowld', async(ctc)=>{
     try {
-        await swapTokens(provider, wallet, UniswapConfigs.WETH, UniswapConfigs.WLD, ethers.utils.parseEther('0.000001'));
+        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.WLD, ethers.utils.parseEther('0.000001'));
     } catch (error) {
         console.error(error);
         
@@ -85,7 +85,7 @@ bot.action('wethtowld', async(ctc)=>{
 
 bot.action('wethtofil', async(ctx)=>{
     try {
-        await swapTokens(provider, wallet, UniswapConfigs.WETH, UniswapConfigs.FIL, ethers.utils.parseEther('0.000001'));
+        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.FIL, ethers.utils.parseEther('0.000001'));
     } catch (error) {
         console.error(error);
     }
@@ -93,7 +93,7 @@ bot.action('wethtofil', async(ctx)=>{
 
 bot.action('wethtobnb', async(ctx)=>{
     try {
-        await swapTokens(provider, wallet, UniswapConfigs.WETH, UniswapConfigs.BNB, ethers.utils.parseEther('0.000001'));
+        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.BNB, ethers.utils.parseEther('0.000001'));
     } catch (error) {
         console.error(error);
         

@@ -1,5 +1,5 @@
 import {ethers} from "ethers";
-import { UniswapConfigs, provider, wallet} from "../config";
+import { UniswapConfigs,  abitrumprovider,  wallet} from "../config";
 import { ABI } from "../config/ABI";
 import { sendMessage } from "../utils/telegram";
 
@@ -7,7 +7,7 @@ import { sendMessage } from "../utils/telegram";
 
     const uniswapRouterABI = ABI;
 
-    const my_signer =  wallet.connect(provider);
+    const my_signer =  wallet.connect(abitrumprovider);
 
     const uniswapRouter = new ethers.Contract(uniswapRouterAddress,uniswapRouterABI, my_signer);
 
