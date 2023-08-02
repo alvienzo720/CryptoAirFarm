@@ -21,7 +21,7 @@ bot.action('ethereum', (ctx) => {
         [Markup.button.callback('Swap WETH for UNI', 'wethtouni')],
         [Markup.button.callback('Swap WETH to WLD', 'wethtowld')],
         [Markup.button.callback('Swap WETH to FIL', 'wethtofil')],
-        [Markup.button.callback('Swap WETH to BNB', 'unitoeth')]
+        [Markup.button.callback('Swap WETH to BNB', 'wethtobnb')]
     ]));
 });
 
@@ -88,6 +88,15 @@ bot.action('wethtofil', async(ctx)=>{
         await swapTokens(provider, wallet, UniswapConfigs.WETH, UniswapConfigs.FIL, ethers.utils.parseEther('0.000001'));
     } catch (error) {
         console.error(error);
+    }
+})
+
+bot.action('wethtobnb', async(ctx)=>{
+    try {
+        await swapTokens(provider, wallet, UniswapConfigs.WETH, UniswapConfigs.BNB, ethers.utils.parseEther('0.000001'));
+    } catch (error) {
+        console.error(error);
+        
     }
 })
 export {bot}
