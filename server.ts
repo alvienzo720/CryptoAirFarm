@@ -1,6 +1,5 @@
 import express from "express";
 import {ethers} from "ethers";
-import {walletBalance} from "./src/controllers/walletController"
 import { PRIVATE_KEYS } from "./src/config/config";
 import {bot} from "./src/bot/bot"
 const app = express();

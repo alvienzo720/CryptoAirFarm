@@ -1,7 +1,7 @@
 import { Markup, Telegraf } from "telegraf";
 import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, uniSwapprovider, wallet } from "../config";
 import { walletBalance } from "../controllers";
-import { swapTokens } from "../controllers/swapTokensUniswap";
+import { swapTokens } from "../controllers/uniswap/swapTokensUniswap";
 import { ethers } from "ethers";
 
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);

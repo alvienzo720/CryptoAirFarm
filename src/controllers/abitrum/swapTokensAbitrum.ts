@@ -1,7 +1,7 @@
 import {ethers} from "ethers";
-import { UniswapConfigs,  abitrumprovider,  wallet} from "../config";
-import { ABI } from "../config/ABI";
-import { sendMessage } from "../utils/telegram";
+import { UniswapConfigs,  abitrumprovider,  wallet} from "../../config";
+import { ABI } from "../../config/ABI";
+import { sendMessage } from "../../utils/telegram";
 
  const uniswapRouterAddress = UniswapConfigs.routerAddress;
 
@@ -39,7 +39,7 @@ export async function swapTokens(
         message += `\n Value: \`${ethers.utils.formatEther(tx.value)}\``
         message += `\n To: \` ${tx.to}\``
         message += `\n Nonce: \`${tx.nonce}\``
-         message += `\n View NFT at :https://sepolia.etherscan.io/tx/${tx.hash}`
+         message += `\n View NFT at :https://arbiscan.io/tx/${tx.hash}`
         sendMessage(message);
 
     const receipt =  await tx.wait()

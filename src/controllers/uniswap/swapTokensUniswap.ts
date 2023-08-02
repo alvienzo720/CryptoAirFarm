@@ -1,7 +1,7 @@
 import {ethers} from "ethers";
-import { UniswapConfigs, uniSwapprovider, wallet} from "../config";
-import { ABI } from "../config/ABI";
-import { sendMessage } from "../utils/telegram";
+import { UniswapConfigs, uniSwapprovider, wallet} from "../../config";
+import { ABI } from "../../config/ABI";
+import { sendMessage } from "../../utils/telegram";
 
  const uniswapRouterAddress = UniswapConfigs.routerAddress;
 
