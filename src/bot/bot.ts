@@ -18,11 +18,10 @@ bot.start((ctx) => {
 
 bot.action('ethereum', (ctx) => {
     ctx.reply("You chose Ethereum! Select a token", Markup.inlineKeyboard([
-        [Markup.button.callback('Swap ETH for UNI', 'ethtouni')],
-        [Markup.button.callback('Swap ETH to ABR', 'unitoeth')],
-        [Markup.button.callback('Swap ETH to WLD', 'unitoeth')],
-        [Markup.button.callback('Swap ETH to FIL', 'unitoeth')],
-        [Markup.button.callback('Swap ETH to BNB', 'unitoeth')]
+        [Markup.button.callback('Swap WETH for UNI', 'wethtouni')],
+        [Markup.button.callback('Swap WETH to WLD', 'wethtowld')],
+        [Markup.button.callback('Swap WETH to FIL', 'unitoeth')],
+        [Markup.button.callback('Swap WETH to BNB', 'unitoeth')]
     ]));
 });
 
@@ -65,14 +64,22 @@ bot.action('balances', async (ctx) =>{
     }
 })
 
-bot.action('ethtouni', async(ctx) => {
+bot.action('wethtouni', async(ctx) => {
     try {
-         const wallet = new ethers.Wallet(UniswapConfigs.privateKey, provider);
-        await swapTokens(provider, wallet,UniswapConfigs.tokenIn, UniswapConfigs.tokenOut,ethers.utils.parseEther('0.000001'));
+        await swapTokens(provider, wallet,UniswapConfigs.WETH, UniswapConfigs.UNI,ethers.utils.parseEther('0.000001'));
     } catch (error) {
         console.log(error)
         
     }
 })
 
+
+bot.action('wethtowld', async(ctc)=>{
+    try {
+        await swapTokens(provider, wallet, UniswapConfigs.WETH, UniswapConfigs.WLD, ethers.utils.parseEther('0.000001'));
+    } catch (error) {
+        console.error(error);
+        
+    }
+})
 export {bot}

@@ -17,8 +17,8 @@ import { sendMessage } from "../utils/telegram";
 export async function swapTokens(
     provider:any,
     wallet: any,
-    tokenIn:string,
-    tokenOut:string,
+    tokenIn:any,
+    tokenOut:any,
     amountIn:any
 
 ){
@@ -40,12 +40,6 @@ export async function swapTokens(
         message += `\n To: \` ${tx.to}\``
         message += `\n Nonce: \`${tx.nonce}\``
          message += `\n View NFT at :https://sepolia.etherscan.io/tx/${tx.hash}`
-
-
-       
-
-       
-
         sendMessage(message);
 
     const receipt =  await tx.wait()
