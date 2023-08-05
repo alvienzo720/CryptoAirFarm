@@ -13,8 +13,10 @@ import { sendMessage } from "../../utils/telegram";
 
     const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
 
+    const gasLimit = ethers.BigNumber.from("5000000")
 
-export async function swapTokens(
+
+export async function swapTokensARB(
     provider:any,
     wallet: any,
     tokenIn:any,
@@ -30,7 +32,8 @@ export async function swapTokens(
         0,
         [tokenIn, tokenOut], // path of tokens to trade through router contract
         wallet.address,
-        deadline
+        deadline,
+        {gasLimit:gasLimit}
     );
 
     console.log(`Transaction Hash ${tx.hash}`);

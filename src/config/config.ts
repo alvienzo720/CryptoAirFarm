@@ -18,7 +18,7 @@ export const PRIVATE_KEYS = process.env.PRIVATE_KEYS?.split(',').filter(Boolean)
 
 export const uniSwapprovider = new ethers.providers.JsonRpcProvider(ConfigParams.INFURA_PROJECT_URL);
 export const polygonprovider =  new ethers.providers.JsonRpcProvider(ConfigParams.POLYGON_MUMBAI_URL);
-export const abitrumprovider = new ethers.providers.JsonRpcProvider(ConfigParams.POLYGON_MUMBAI_URL);
+export const abitrumprovider = new ethers.providers.JsonRpcProvider(ConfigParams.ABITRUM_URL);
 export const optimismprovier = new ethers.providers.JsonRpcProvider(ConfigParams.OPTIMISM_URL);
 
 
@@ -28,7 +28,7 @@ export const UniswapConfigs = {
     WLD:process.env.WLD,
     FIL:process.env.FIL,
     BNB:process.env.BNB,
-    privateKey: 'db50acc44a9eee0a59abf844f18703eb1c5784f8a2606f4d73ba622fab7024b6',
+    privateKey: process.env.PRIVATE_KEY?.toString(),
     routerAddress: '0xE592427A0AEce92De3Edee1F18E0157C05861564',
 }
 

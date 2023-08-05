@@ -1,8 +1,10 @@
 import { Markup, Telegraf } from "telegraf";
-import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, uniSwapprovider, wallet } from "../config";
+import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, abitrumprovider, uniSwapprovider, wallet } from "../config";
 import { walletBalance } from "../controllers";
 import { swapTokens } from "../controllers/uniswap/swapTokensUniswap";
 import { ethers } from "ethers";
+import { transpileModule } from "typescript";
+import { swapTokensARB } from "../controllers/abitrum/swapTokensAbitrum";
 
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
 
@@ -27,7 +29,7 @@ bot.action('ethereum', (ctx) => {
 
 bot.action('abitrum', (ctx) => {
     ctx.reply("You chose Abitrum! Select a token", Markup.inlineKeyboard([
-        [Markup.button.callback('Swap ABR for UNI', 'ethtouni')],
+        [Markup.button.callback('Swap ABR for UNI', 'arbtouni')],
         [Markup.button.callback('Swap ARB to ETH', 'unitoeth')],
         [Markup.button.callback('Swap ARB to WLD', 'unitoeth')],
         [Markup.button.callback('Swap ARB to FIL', 'unitoeth')],
@@ -97,6 +99,14 @@ bot.action('wethtobnb', async(ctx)=>{
     } catch (error) {
         console.error(error);
         
+    }
+})
+
+bot.action('arbtouni', async(ctx)=>{
+    try {
+        await swapTokensARB(abitrumprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.UNI, ethers.utils.parseEther('0.000001'));
+    } catch (error) {
+        console.error(error);
     }
 })
 export {bot}
