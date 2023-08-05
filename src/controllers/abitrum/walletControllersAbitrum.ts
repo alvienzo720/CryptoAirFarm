@@ -1,11 +1,11 @@
 import { ethers } from "ethers"
-import {  provider } from "../config/config"
-import { sendMessage } from "../utils/telegram";
+import { abitrumprovider } from "../../config/config"
+import { sendMessage } from "../../utils/telegram";
 
 export const walletBalance = async (keys:string[]) => {
     try {
         for(let i = 0; i< keys.length; i++){
-         const wallet =  new ethers.Wallet(keys[i], provider)
+         const wallet =  new ethers.Wallet(keys[i], abitrumprovider)
         const balance = await wallet.getBalance();
         const readableBalance =  parseFloat(ethers.utils.formatEther(balance)).toFixed(4);
         // console.log(`Balance Account ${i + 1}`, readableBalance);
