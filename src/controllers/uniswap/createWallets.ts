@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
+import { sendMessage } from "../../utils/telegram";
 
 export async function CreateWallets() {
-for(let i = 0; i < 10; i++){
+for(let i = 0; i < 5; i++){
     const randomWallet = ethers.Wallet.createRandom()
     // let mnemonic = randomWallet.mnemonic.phrase;
     let mnemonic:any = randomWallet.mnemonic?.phrase;
@@ -9,9 +10,16 @@ for(let i = 0; i < 10; i++){
     console.log("Memonic Phrase: ", mnemonic);
 
     let walletFromMnmonic =  ethers.Wallet.fromPhrase(mnemonic);
-    console.log("Address: ", walletFromMnmonic.address);
-    console.log("PrivateKey: ", walletFromMnmonic.privateKey);
-    console.log("--------------------");
+    let message = `Wallet ${i + 1}`;
+    message += `\n Address :\`${walletFromMnmonic.address}\``;
+    message += `\n PrivateKey :\`${walletFromMnmonic.privateKey}\``
+    message += `\n Memonic Phrase : \`${mnemonic}\``
+    sendMessage(message);
+
+
+    // console.log("Address: ", walletFromMnmonic.address);
+    // console.log("PrivateKey: ", walletFromMnmonic.privateKey);
+    // console.log("--------------------");
 
 }
 

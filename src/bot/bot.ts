@@ -1,6 +1,6 @@
 import { Markup, Telegraf } from "telegraf";
 import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, abitrumprovider, uniSwapprovider } from "../config";
-import { walletBalance } from "../controllers";
+import { CreateWallets, walletBalance } from "../controllers";
 import { swapTokens } from "../controllers/uniswap/swapTokensUniswap";
 import { ethers } from "ethers";
 import { swapTokensARB } from "../controllers/abitrum/swapTokensAbitrum";
@@ -10,53 +10,46 @@ const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
 const wallet = new ethers.Wallet(UniswapConfigs.privateKey);
 
 bot.start((ctx) => {
-   ctx.reply("Select a Network to Use", Markup.inlineKeyboard([
-    [Markup.button.callback('Accounts Balances', 'balances')],
-      [Markup.button.callback('Ethereum', 'ethereum')],
-        [Markup.button.callback('Abitrum', 'abitrum')],
-        [Markup.button.callback('Optimism', 'optimism')],
-        [Markup.button.callback('Polygon', 'polygon')]
+//    CreateWallets();
+   ctx.reply("MAIN MENU", Markup.inlineKeyboard([
+    [Markup.button.callback('BUY TOKEN', 'buytoken'), Markup.button.callback('SELL TOKEN', 'selltoken')],
+    [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
+    [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
+    [Markup.button.callback('TOKEN BALANCE', 'tokenbalance'), Markup.button.callback('PNL ANALYSIS', 'pnlanalysis'), Markup.button.callback('SEETINGS', 'settings')],
+]
+));
+});
+
+bot.action('buytoken', (ctx) => {
+    let isPrivateTx = true;
+    let buttonprivate = isPrivateTx ?  '👁‍🗨 Private Txn: ✅' : '👁‍🗨 Private Txn: 🔴';
+    ctx.reply(`🛠 Buy Tokens | Tutorial - Set your buy settings using the menu below, then enter the token address to buy. Using high slippage may result in frontrun or sandwich attacks. To be protected from MEV attacks, use private transactions.
+    -Buy Amount: the amt of ETH to spend 
+    -Slippage: Definition
+⬩Gas: 24 GWEI ⬩Block: 17870583 ⬩ETH: $1833`, Markup.inlineKeyboard([
+    [Markup.button.callback('🏘 Main Menu', 'buytoken'), Markup.button.callback('❌ Close', 'exit')],
+    [Markup.button.callback(buttonprivate, 'private')],
+    [Markup.button.callback('🛡 Fail Guard', 'failguard'), Markup.button.callback('👟 Frontrun', 'frontrun')],
+    [Markup.button.callback('SELECT WALLET', 'nothing')],
+    [Markup.button.callback('💳 W1', 'wallet1'), Markup.button.callback('💳 W2', 'wallet2'),
+     Markup.button.callback('💳 W3', 'wallet3'),  Markup.button.callback('💳 W4', 'wallet4'),
+     Markup.button.callback('💳 W5', 'wallet5') ], 
+     [Markup.button.callback('BUY AMOUNT', 'nothing')],     
+    [Markup.button.callback('0.1 ETH', 'zeropoint1'),
+    Markup.button.callback('0.3 ETH', 'zeropoint3'),
+    Markup.button.callback('0.5 ETH', 'zeropoint5')],
+    [Markup.button.callback('1.0', 'oneeth'), Markup.button.callback('CUSTOM', 'customamount')],
+     [Markup.button.callback('SLIPPAGE', 'nothing')],  
+    [Markup.button.callback('5%', '5percent'),
+    Markup.button.callback('10% ETH', '10percent'),
+    Markup.button.callback('20% ETH', '20percent')],
+    [Markup.button.callback('Custom', 'customslippage'), Markup.button.callback('Auto', 'autoslipage')],
+
+    
     ]));
 });
 
-bot.action('ethereum', (ctx) => {
-    ctx.reply("You chose Ethereum! Select a token", Markup.inlineKeyboard([
-        [Markup.button.callback('Swap WETH for UNI', 'wethtouni')],
-        [Markup.button.callback('Swap WETH to WLD', 'wethtowld')],
-        [Markup.button.callback('Swap WETH to FIL', 'wethtofil')],
-        [Markup.button.callback('Swap WETH to BNB', 'wethtobnb')]
-    ]));
-});
 
-bot.action('abitrum', (ctx) => {
-    ctx.reply("You chose Abitrum! Select a token", Markup.inlineKeyboard([
-        [Markup.button.callback('Swap ABR for UNI', 'arbtouni')],
-        [Markup.button.callback('Swap ARB to ETH', 'unitoeth')],
-        [Markup.button.callback('Swap ARB to WLD', 'unitoeth')],
-        [Markup.button.callback('Swap ARB to FIL', 'unitoeth')],
-        [Markup.button.callback('Swap ARB to BNB', 'unitoeth')]
-    ]));
-});
-
-bot.action('optimism', (ctx) => {
-    ctx.reply("You chose Optimism! Select a token", Markup.inlineKeyboard([
-        [Markup.button.callback('Swap OP for UNI', 'ethtouni')],
-        [Markup.button.callback('Swap OP to ETH', 'unitoeth')],
-        [Markup.button.callback('Swap OP to WLD', 'unitoeth')],
-        [Markup.button.callback('Swap Op to FIL', 'unitoeth')],
-        [Markup.button.callback('Swap OP to BNB', 'unitoeth')]
-    ]));
-});
-
-bot.action('polygon', (ctx) => {
-    ctx.reply("You chose Polygon! Select a token", Markup.inlineKeyboard([
-        [Markup.button.callback('Swap MAT for UNI', 'ethtouni')],
-        [Markup.button.callback('Swap MAT to ETH', 'unitoeth')],
-        [Markup.button.callback('Swap MAT to WLD', 'unitoeth')],
-        [Markup.button.callback('Swap MAT to FIL', 'unitoeth')],
-        [Markup.button.callback('Swap MAT to BNB', 'unitoeth')]
-    ]));
-});
 
 bot.action('balances', async (ctx) =>{
     try {
