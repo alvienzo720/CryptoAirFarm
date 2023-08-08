@@ -1,11 +1,13 @@
 import {ethers} from "ethers";
-import { UniswapConfigs, uniSwapprovider, wallet} from "../../config";
+import { UniswapConfigs, uniSwapprovider} from "../../config";
 import { ABI } from "../../config/ABI";
 import { sendMessage } from "../../utils/telegram";
 
  const uniswapRouterAddress = UniswapConfigs.routerAddress;
 
     const uniswapRouterABI = ABI;
+
+    const wallet = new ethers.Wallet(UniswapConfigs.privateKey, uniSwapprovider);
 
     const my_signer =  wallet.connect(uniSwapprovider);
 
@@ -36,7 +38,7 @@ export async function swapTokens(
     console.log(`Transaction Hash ${tx.hash}`);
      let message = `Token ETH Swapped Successfully`
         message += `\n Hash: \`${tx.hash}\``
-        message += `\n Value: \`${ethers.utils.formatEther(tx.value)}\``
+        message += `\n Value: \`${ethers.formatEther(tx.value)}\``
         message += `\n To: \` ${tx.to}\``
         message += `\n Nonce: \`${tx.nonce}\``
          message += `\n View NFT at :https://sepolia.etherscan.io/tx/${tx.hash}`

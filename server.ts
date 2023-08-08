@@ -1,6 +1,6 @@
 import express from "express";
 import {ethers} from "ethers";
-import { PRIVATE_KEYS } from "./src/config/config";
+import { PRIVATE_KEYS, UniswapConfigs } from "./src/config/config";
 import {bot} from "./src/bot/bot"
 const app = express();
 
@@ -16,6 +16,8 @@ const startBot = async () => {
 }
 startBot();
 app.listen(5000, ()=>{
+    console.log("PrivateKey:", UniswapConfigs.privateKey);
+
     console.log("We are Ready to Roll");
 })
 

@@ -1,12 +1,13 @@
 import { Markup, Telegraf } from "telegraf";
-import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, abitrumprovider, uniSwapprovider, wallet } from "../config";
+import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, abitrumprovider, uniSwapprovider } from "../config";
 import { walletBalance } from "../controllers";
 import { swapTokens } from "../controllers/uniswap/swapTokensUniswap";
 import { ethers } from "ethers";
-import { transpileModule } from "typescript";
 import { swapTokensARB } from "../controllers/abitrum/swapTokensAbitrum";
 
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
+
+const wallet = new ethers.Wallet(UniswapConfigs.privateKey);
 
 bot.start((ctx) => {
    ctx.reply("Select a Network to Use", Markup.inlineKeyboard([
@@ -68,7 +69,7 @@ bot.action('balances', async (ctx) =>{
 
 bot.action('wethtouni', async(ctx) => {
     try {
-        await swapTokens(uniSwapprovider, wallet,UniswapConfigs.WETH, UniswapConfigs.UNI,ethers.utils.parseEther('0.000001'));
+        await swapTokens(uniSwapprovider, wallet,UniswapConfigs.WETH, UniswapConfigs.UNI,ethers.parseEther('0.000001'));
     } catch (error) {
         console.log(error)
         
@@ -78,7 +79,7 @@ bot.action('wethtouni', async(ctx) => {
 
 bot.action('wethtowld', async(ctc)=>{
     try {
-        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.WLD, ethers.utils.parseEther('0.000001'));
+        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.WLD, ethers.parseEther('0.000001'));
     } catch (error) {
         console.error(error);
         
@@ -87,7 +88,7 @@ bot.action('wethtowld', async(ctc)=>{
 
 bot.action('wethtofil', async(ctx)=>{
     try {
-        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.FIL, ethers.utils.parseEther('0.000001'));
+        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.FIL, ethers.parseEther('0.000001'));
     } catch (error) {
         console.error(error);
     }
@@ -95,7 +96,7 @@ bot.action('wethtofil', async(ctx)=>{
 
 bot.action('wethtobnb', async(ctx)=>{
     try {
-        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.BNB, ethers.utils.parseEther('0.000001'));
+        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.BNB, ethers.parseEther('0.000001'));
     } catch (error) {
         console.error(error);
         
@@ -104,7 +105,7 @@ bot.action('wethtobnb', async(ctx)=>{
 
 bot.action('arbtouni', async(ctx)=>{
     try {
-        await swapTokensARB(abitrumprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.UNI, ethers.utils.parseEther('0.000001'));
+        await swapTokensARB(abitrumprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.UNI, ethers.parseEther('0.000001'));
     } catch (error) {
         console.error(error);
     }

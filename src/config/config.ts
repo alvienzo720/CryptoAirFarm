@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { ethers } from "ethers";
+import {ethers} from "ethers";
 
 export const ConfigParams = {
     INFURA_PROJECT_URL:process.env.INFURA_PROJECT_URL || "",
@@ -12,14 +12,14 @@ export const ConfigParams = {
 
 }
 
-export const PRIVATE_KEYS = process.env.PRIVATE_KEYS?.split(',').filter(Boolean) || [];
+export const PRIVATE_KEYS:any = process.env.PRIVATE_KEYS?.split(',').filter(Boolean) || [];
 
 
 
-export const uniSwapprovider = new ethers.providers.JsonRpcProvider(ConfigParams.INFURA_PROJECT_URL);
-export const polygonprovider =  new ethers.providers.JsonRpcProvider(ConfigParams.POLYGON_MUMBAI_URL);
-export const abitrumprovider = new ethers.providers.JsonRpcProvider(ConfigParams.ABITRUM_URL);
-export const optimismprovier = new ethers.providers.JsonRpcProvider(ConfigParams.OPTIMISM_URL);
+export const uniSwapprovider:any = new ethers.JsonRpcProvider(ConfigParams.INFURA_PROJECT_URL);
+export const polygonprovider =  new ethers.JsonRpcProvider(ConfigParams.POLYGON_MUMBAI_URL);
+export const abitrumprovider = new ethers.JsonRpcProvider(ConfigParams.ABITRUM_URL);
+export const optimismprovier = new ethers.JsonRpcProvider(ConfigParams.OPTIMISM_URL);
 
 
 export const UniswapConfigs = {
@@ -32,4 +32,3 @@ export const UniswapConfigs = {
     routerAddress: String(process.env.ROUTER_ADDRESS),
 }
 
-export const wallet =  new ethers.Wallet(UniswapConfigs.privateKey);
