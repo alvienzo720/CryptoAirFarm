@@ -27,7 +27,7 @@ bot.action('buytoken', (ctx) => {
     -Buy Amount: the amt of ETH to spend 
     -Slippage: Definition
 ⬩Gas: 24 GWEI ⬩Block: 17870583 ⬩ETH: $1833`, Markup.inlineKeyboard([
-    [Markup.button.callback('🏘 Main Menu', 'buytoken'), Markup.button.callback('❌ Close', 'exit')],
+    [Markup.button.callback('🏘 Main Menu', 'main_menu'), Markup.button.callback('❌ Close', 'exit')],
     [Markup.button.callback(buttonprivate, 'private')],
     [Markup.button.callback('🛡 Fail Guard', 'failguard'), Markup.button.callback('👟 Frontrun', 'frontrun')],
     [Markup.button.callback('SELECT WALLET', 'nothing')],
@@ -44,11 +44,39 @@ bot.action('buytoken', (ctx) => {
     Markup.button.callback('10% ETH', '10percent'),
     Markup.button.callback('20% ETH', '20percent')],
     [Markup.button.callback('Custom', 'customslippage'), Markup.button.callback('Auto', 'autoslipage')],
-
-    
     ]));
 });
 
+
+bot.action('selltoken', (ctx) => {
+    let isPrivateTx = true;
+    let buttonprivate = isPrivateTx ?  '👁‍🗨 Private Txn: ✅' : '👁‍🗨 Private Txn: 🔴';
+    ctx.reply(`🛠 Sell Tokens | Tutorial - Set your sell settings in the menu below and then enter the lines numbers of the tokens you wish to sell. Selling using high slippage can result in being frontrun or sandwiched. Use private transactions to avoid sandwich attacks.
+   •Sell Amount: the % of your bag you wish to sell
+   •Slippage: Definition
+⬩Gas: 26 GWEI ⬩Block: 17870778 ⬩ETH: $1832`, Markup.inlineKeyboard([
+    [Markup.button.callback('🏘 Main Menu', 'main_menu'), Markup.button.callback('❌ Close', 'exit')],
+    [Markup.button.callback(buttonprivate, 'private')],
+    [Markup.button.callback('🛡 Fail Guard', 'failguard'), Markup.button.callback('👟 Frontrun', 'frontrun')],
+     [Markup.button.callback('SELL AMOUNT', 'nothing')],     
+    [Markup.button.callback('10% ', '10percent'),
+    Markup.button.callback('15%', '15percent'),
+    Markup.button.callback('25%', '35percent')],
+    [Markup.button.callback('50 ', '50percent'),
+    Markup.button.callback('75%', '75percent'),
+    Markup.button.callback('100%', '100percent')],
+    [Markup.button.callback('SELECT TOKEN TO SELL', 'tokentosell')],
+    ]));
+});
+
+bot.action('main_menu', (ctx) => {
+    ctx.reply("MAIN MENU", Markup.inlineKeyboard([
+        [Markup.button.callback('BUY TOKEN', 'buytoken'), Markup.button.callback('SELL TOKEN', 'selltoken')],
+        [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
+        [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
+        [Markup.button.callback('TOKEN BALANCE', 'tokenbalance'), Markup.button.callback('PNL ANALYSIS', 'pnlanalysis'), Markup.button.callback('SEETINGS', 'settings')],
+    ]));
+});
 
 
 bot.action('balances', async (ctx) =>{
