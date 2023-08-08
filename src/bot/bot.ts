@@ -20,8 +20,10 @@ bot.start((ctx) => {
 ));
 });
 
+let tokenAddres:string = "";
+
 bot.action('buytoken', (ctx) => {
-    let isPrivateTx = true;
+    let isPrivateTx = false;
     let buttonprivate = isPrivateTx ?  '👁‍🗨 Private Txn: ✅' : '👁‍🗨 Private Txn: 🔴';
     ctx.reply(`🛠 Buy Tokens | Tutorial - Set your buy settings using the menu below, then enter the token address to buy. Using high slippage may result in frontrun or sandwich attacks. To be protected from MEV attacks, use private transactions.
     -Buy Amount: the amt of ETH to spend 
@@ -45,8 +47,17 @@ bot.action('buytoken', (ctx) => {
     Markup.button.callback('20% ETH', '20percent')],
     [Markup.button.callback('Custom', 'customslippage'), Markup.button.callback('Auto', 'autoslipage')],
     ]));
+    ctx.reply("Please enter a Token Contract Address");
 });
 
+bot.on('text', async(ctx)=>{
+    tokenAddres = ctx.message.text;
+    try {
+        
+    } catch (error) {
+        
+    }
+})
 
 bot.action('selltoken', (ctx) => {
     let isPrivateTx = true;
@@ -88,41 +99,7 @@ bot.action('balances', async (ctx) =>{
     }
 })
 
-bot.action('wethtouni', async(ctx) => {
-    try {
-        await swapTokens(uniSwapprovider, wallet,UniswapConfigs.WETH, UniswapConfigs.UNI,ethers.parseEther('0.000001'));
-    } catch (error) {
-        console.log(error)
-        
-    }
-})
 
-
-bot.action('wethtowld', async(ctc)=>{
-    try {
-        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.WLD, ethers.parseEther('0.000001'));
-    } catch (error) {
-        console.error(error);
-        
-    }
-})
-
-bot.action('wethtofil', async(ctx)=>{
-    try {
-        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.FIL, ethers.parseEther('0.000001'));
-    } catch (error) {
-        console.error(error);
-    }
-})
-
-bot.action('wethtobnb', async(ctx)=>{
-    try {
-        await swapTokens(uniSwapprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.BNB, ethers.parseEther('0.000001'));
-    } catch (error) {
-        console.error(error);
-        
-    }
-})
 
 bot.action('arbtouni', async(ctx)=>{
     try {
@@ -130,5 +107,9 @@ bot.action('arbtouni', async(ctx)=>{
     } catch (error) {
         console.error(error);
     }
+})
+
+bot.command('exit', async(ctx)=>{
+    await ctx.leaveChat();
 })
 export {bot}
