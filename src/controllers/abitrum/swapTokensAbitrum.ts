@@ -3,13 +3,12 @@ import { UniswapConfigs,  abitrumprovider,  wallet} from "../../config";
 import { ABI } from "../../config/ABI";
 import { sendMessage } from "../../utils/telegram";
 
- const uniswapRouterAddress = UniswapConfigs.routerAddress;
 
     const uniswapRouterABI = ABI;
 
     const my_signer =  wallet.connect(abitrumprovider);
 
-    const uniswapRouter = new ethers.Contract(uniswapRouterAddress,uniswapRouterABI, my_signer);
+    const uniswapRouter = new ethers.Contract(UniswapConfigs.routerAddress,uniswapRouterABI, my_signer);
 
     const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
 
