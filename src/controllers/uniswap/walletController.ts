@@ -5,9 +5,9 @@ import { sendMessage } from "../../utils/telegram";
 export const walletBalance = async (keys:string[]) => {
     try {
         for(let i = 0; i< keys.length; i++){
-         const wallet =  new ethers.Wallet(keys[i], uniSwapprovider)
-        const balance = await wallet.getBalance();
-        const readableBalance =  parseFloat(ethers.utils.formatEther(balance)).toFixed(4);
+         const wallet:any =  new ethers.Wallet(keys[i], uniSwapprovider)
+        const balance = uniSwapprovider.getBalance(wallet.address);
+        const readableBalance =  parseFloat(ethers.formatEther(await balance)).toFixed(4);
         // console.log(`Balance Account ${i + 1}`, readableBalance);
         let message = `Balance Account ${i + 1}: ||  ${readableBalance} ETH`;
 

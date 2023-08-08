@@ -1,10 +1,12 @@
 import {ethers} from "ethers";
-import { UniswapConfigs,  abitrumprovider,  wallet} from "../../config";
+import { UniswapConfigs,  abitrumprovider} from "../../config";
 import { ABI } from "../../config/ABI";
 import { sendMessage } from "../../utils/telegram";
 
 
     const uniswapRouterABI = ABI;
+
+    const wallet =  new ethers.Wallet(UniswapConfigs.privateKey);
 
     const my_signer =  wallet.connect(abitrumprovider);
 
@@ -12,7 +14,8 @@ import { sendMessage } from "../../utils/telegram";
 
     const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
 
-    const gasLimit = ethers.BigNumber.from("5000000")
+    // const gasLimit = ethers.BigNumber.from("5000000")
+    
 
 
 export async function swapTokensARB(
@@ -32,13 +35,13 @@ export async function swapTokensARB(
         [tokenIn, tokenOut], // path of tokens to trade through router contract
         wallet.address,
         deadline,
-        {gasLimit:gasLimit}
+        // {gasLimit:gasLimit}
     );
 
     console.log(`Transaction Hash ${tx.hash}`);
      let message = `Token ETH Swapped Successfully`
         message += `\n Hash: \`${tx.hash}\``
-        message += `\n Value: \`${ethers.utils.formatEther(tx.value)}\``
+        message += `\n Value: \`${ethers.formatEther(tx.value)}\``
         message += `\n To: \` ${tx.to}\``
         message += `\n Nonce: \`${tx.nonce}\``
          message += `\n View NFT at :https://arbiscan.io/tx/${tx.hash}`
