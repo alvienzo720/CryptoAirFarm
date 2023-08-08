@@ -28,8 +28,8 @@ export const UniswapConfigs = {
     WLD:process.env.WLD,
     FIL:process.env.FIL,
     BNB:process.env.BNB,
-    privateKey: process.env.PRIVATE_KEY?.toString(),
-    routerAddress: '0xE592427A0AEce92De3Edee1F18E0157C05861564',
+    privateKey: String(process.env.PRIVATE_KEY),
+    routerAddress: String(process.env.ROUTER_ADDRESS),
 }
 
 export const wallet =  new ethers.Wallet(UniswapConfigs.privateKey);
