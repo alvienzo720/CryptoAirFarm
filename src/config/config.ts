@@ -9,6 +9,7 @@ export const ConfigParams = {
     BOT_TOKEN:process.env.BOT_TOKEN || "",
     WHITELISTED_USERS:[541365365],
     TELEGRAM_DELETE_MESSAGE_INTERVAL:process.env.TELEGRAM_DELETE_MESSAGE_INTERVAL,
+    MONGO_URL:process.env.MONGO_URL || ""
 
 }
 

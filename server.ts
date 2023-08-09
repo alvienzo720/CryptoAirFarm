@@ -1,5 +1,6 @@
 import express from "express";
-import {bot} from "./src/bot/bot"
+import {bot} from "./src/bot/bot";
+import {DBConn} from "./src/config/dbcon";
 const app = express();
 
 // walletBalance(PRIVATE_KEYS)
@@ -12,6 +13,7 @@ const startBot = async () => {
     })
     
 }
+DBConn
 startBot();
 app.listen(5000, ()=>{
     console.log("We are Ready to Roll");
