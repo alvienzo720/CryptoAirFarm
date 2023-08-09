@@ -4,10 +4,11 @@ import { CreateWallets, walletBalance } from "../controllers";
 import { swapTokens } from "../controllers/uniswap/swapTokensUniswap";
 import { ethers } from "ethers";
 import { swapTokensARB } from "../controllers/abitrum/swapTokensAbitrum";
-
+import {mongoSession} from "../middleware/sessionMiddleware"
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
-
+bot.use(mongoSession);
 const wallet = new ethers.Wallet(UniswapConfigs.privateKey);
+
 
 bot.start((ctx) => {
 //    CreateWallets();
@@ -112,4 +113,7 @@ bot.action('arbtouni', async(ctx)=>{
 bot.command('exit', async(ctx)=>{
     await ctx.leaveChat();
 })
+
+
+
 export {bot}
