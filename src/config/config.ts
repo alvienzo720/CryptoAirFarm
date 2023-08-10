@@ -7,7 +7,7 @@ export const ConfigParams = {
     OPTIMISM_URL:process.env.OPTIMISM_URL || "",
     ABITRUM_URL:process.env.ABITRUM_URL || "",
     BOT_TOKEN:process.env.BOT_TOKEN || "",
-    WHITELISTED_USERS:[541365365],
+    WHITELISTED_USERS:[],
     TELEGRAM_DELETE_MESSAGE_INTERVAL:process.env.TELEGRAM_DELETE_MESSAGE_INTERVAL,
     MONGO_URL:process.env.MONGO_URL || ""
 

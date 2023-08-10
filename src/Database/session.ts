@@ -1,11 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
+interface ISession {
+    userKey:number,
+    sessionDate:Date,
+    sessionData:object
+}
 
-const sessionSchema =  new mongoose.Schema({
-    userKey:String,
-    sessionData:Object
-});
+const SessionSchema =  new Schema<ISession>({
+    userKey:{type:Schema.Types.Number, required:true},
+    sessionDate:{ type : Date },
+    sessionData:{type:Schema.Types.Mixed, required:true}
 
-export const Session =  mongoose.model('Session', sessionSchema);
+})
+const SessionModel =  model<ISession>("UserSessions",SessionSchema);
 
-export default Session
+export {SessionModel, SessionSchema}
