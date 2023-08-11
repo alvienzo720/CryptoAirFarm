@@ -5,6 +5,7 @@ import { swapTokens } from "../controllers/uniswap/swapTokensUniswap";
 import { ethers } from "ethers";
 import { swapTokensARB } from "../controllers/abitrum/swapTokensAbitrum";
 import {mongoSession} from "../middleware/sessionMiddleware"
+import { sendMessage } from "../utils/telegram";
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
 bot.use(mongoSession);
 const wallet = new ethers.Wallet(UniswapConfigs.privateKey);
@@ -12,14 +13,37 @@ const wallet = new ethers.Wallet(UniswapConfigs.privateKey);
 
 bot.start((ctx) => {
 //    CreateWallets();
-   ctx.reply("MAIN MENU", Markup.inlineKeyboard([
-    [Markup.button.callback('BUY TOKEN', 'buytoken'), Markup.button.callback('SELL TOKEN', 'selltoken')],
-    [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
-    [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
-    [Markup.button.callback('TOKEN BALANCE', 'tokenbalance'), Markup.button.callback('PNL ANALYSIS', 'pnlanalysis'), Markup.button.callback('SEETINGS', 'settings')],
-]
-));
+ctx.reply(`Dear Crypto Air Farm Users,
+
+To access and utilize our specialized bot services, we invite you to subscribe to one of our access token plans, available for a day, week, month, or year. Simply visit our website to make your selection.
+
+Please note that payments must be made using either USDC or USDT cryptocurrencies. Once your payment is successful, you will receive immediate access to our bot, empowering you with the tools you need in the crypto farming world.
+
+Your participation and support are vital to our growth, and we sincerely thank you for choosing Crypto Air Farm.
+
+Best regards,
+The Crypto Air Farm Team`);
+ctx.reply("Please enter the token from the website to continue");
+
 });
+
+bot.on('text', async(ctx)=>{
+    const validToken =  ctx.message.text;
+
+
+    if(validToken === 'helloworld'){
+        ctx.reply('Welcome to Crypto Air Farm! Here is the main menu:', Markup.inlineKeyboard([
+        [Markup.button.callback('BUY TOKEN', 'buytoken'), Markup.button.callback('SELL TOKEN', 'selltoken')],
+        [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
+        [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
+        [Markup.button.callback('TOKEN BALANCE', 'tokenbalance'), Markup.button.callback('PNL ANALYSIS', 'pnlanalysis'), Markup.button.callback('SEETINGS', 'settings')],
+    ]));
+    }else {
+        ctx.reply('The token you entered is invalid. Please check your token and try again.')
+    }
+})
+
+
 
 let tokenAddres:string = "";
 
@@ -82,7 +106,7 @@ bot.action('selltoken', (ctx) => {
 });
 
 bot.action('main_menu', (ctx) => {
-    ctx.reply("MAIN MENU", Markup.inlineKeyboard([
+    ctx.reply("Welcome to Crypto Air Farm! Here is the main menu:", Markup.inlineKeyboard([
         [Markup.button.callback('BUY TOKEN', 'buytoken'), Markup.button.callback('SELL TOKEN', 'selltoken')],
         [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
         [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
