@@ -6,6 +6,7 @@ import { ethers } from "ethers";
 import { swapTokensARB } from "../controllers/abitrum/swapTokensAbitrum";
 import {mongoSession} from "../middleware/sessionMiddleware"
 import { sendMessage } from "../utils/telegram";
+import { verifyToken } from "../middleware/verifyToken";
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
 bot.use(mongoSession);
 const wallet = new ethers.Wallet(UniswapConfigs.privateKey);
@@ -28,10 +29,11 @@ ctx.reply("Please enter the token from the website to continue");
 });
 
 bot.on('text', async(ctx)=>{
-    const validToken =  ctx.message.text;
+    const token =  ctx.message.text;
+    const isValidToken =  await verifyToken(token);
 
 
-    if(validToken === 'helloworld'){
+    if(isValidToken){
         ctx.reply('Welcome to Crypto Air Farm! Here is the main menu:', Markup.inlineKeyboard([
         [Markup.button.callback('BUY TOKEN', 'buytoken'), Markup.button.callback('SELL TOKEN', 'selltoken')],
         [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],

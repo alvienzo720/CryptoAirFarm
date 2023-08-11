@@ -1,6 +1,7 @@
 import express from "express";
 import {bot} from "./src/bot/bot";
 import {DBConn} from "./src/config/dbcon";
+import {createTokens} from "./src/middleware/createAccessToken"
 const app = express();
 
 // walletBalance(PRIVATE_KEYS)
@@ -13,6 +14,7 @@ const startBot = async () => {
     })
     
 }
+// createTokens();// 
 DBConn
 startBot();
 app.listen(5000, ()=>{
