@@ -34,13 +34,13 @@ export async function mongoSession(ctx: ContextType, next: NextFunction) {
 
             try {
                 await user.save();
-                console.log(`User with ID ${ctx.from.id} created.`);
+                // console.log(`User with ID ${ctx.from.id} created.`);
             } catch (userSaveError) {
-                console.error(`Error saving user with ID ${ctx.from.id}:`, userSaveError);
+                // console.error(`Error saving user with ID ${ctx.from.id}:`, userSaveError);
             }
 
         } else {
-            console.log(`User with ID ${ctx.from.id} exists.`);
+            // console.log(`User with ID ${ctx.from.id} exists.`);
         }
 
         ctx.session = sessionDoc ? sessionDoc.sessionData : {};
@@ -49,14 +49,14 @@ export async function mongoSession(ctx: ContextType, next: NextFunction) {
 
         if (sessionDoc) {
             await SessionModel.findOneAndUpdate({ userKey }, { sessionData: ctx.session });
-            console.log(`Session for user ID ${ctx.from.id} updated.`);
+            // console.log(`Session for user ID ${ctx.from.id} updated.`);
         } else {
             const newSession = new SessionModel({ userKey, sessionData: ctx.session });
             try {
                 await newSession.save();
-                console.log(`Session for user ID ${ctx.from.id} created.`);
+                // console.log(`Session for user ID ${ctx.from.id} created.`);
             } catch (sessionSaveError) {
-                console.error(`Error saving session for user ID ${ctx.from.id}:`, sessionSaveError);
+                // console.error(`Error saving session for user ID ${ctx.from.id}:`, sessionSaveError);
             }
         }
 
