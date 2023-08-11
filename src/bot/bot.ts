@@ -75,6 +75,7 @@ bot.action('buytoken', (ctx) => {
     ctx.reply("Please enter a Token Contract Address");
 });
 
+
 bot.on('text', async(ctx)=>{
     tokenAddres = ctx.message.text;
     try {
@@ -124,11 +125,15 @@ bot.action('balances', async (ctx) =>{
     }
 })
 
+let amount = ethers.parseEther('0.000000001');
+bot.command('zeropoint1', (ctx)=>{
+    amount =  ethers.parseEther('0.0000001');
+    ctx.reply('Amount set to 0.1 ETh')
+})
 
-
-bot.action('arbtouni', async(ctx)=>{
+bot.action('buytokenwithaddress', async(ctx)=>{
     try {
-        await swapTokensARB(abitrumprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.UNI, ethers.parseEther('0.000001'));
+        await swapTokens(amount,tokenAddres);
     } catch (error) {
         console.error(error);
     }
