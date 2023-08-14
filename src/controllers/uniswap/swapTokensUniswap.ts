@@ -4,6 +4,7 @@ import { ABI } from "../../config/ABI";
 import { sendMessage } from "../../utils/telegram";
 
  const uniswapRouterAddress = UniswapConfigs.routerAddress;
+ 
 
     const uniswapRouterABI = ABI;
 
@@ -17,12 +18,8 @@ import { sendMessage } from "../../utils/telegram";
 
 
 export async function swapTokens(
-    provider:any,
-    wallet: any,
-    tokenIn:any,
-    tokenOut:any,
-    amountIn:any
-
+  amountIn:any,
+  tokenOut:string
 ){
 
 
@@ -30,7 +27,7 @@ export async function swapTokens(
     const tx =  await uniswapRouter.swapExactTokensForTokens(
         amountIn,
         0,
-        [tokenIn, tokenOut], // path of tokens to trade through router contract
+        [UniswapConfigs.WETH, tokenOut], // path of tokens to trade through router contract
         wallet.address,
         deadline
     );

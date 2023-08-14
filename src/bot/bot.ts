@@ -7,12 +7,15 @@ import { swapTokensARB } from "../controllers/abitrum/swapTokensAbitrum";
 import {mongoSession} from "../middleware/sessionMiddleware"
 import { sendMessage } from "../utils/telegram";
 import { verifyToken } from "../middleware/verifyToken";
+import {LocalSession } from "telegraf-session-local";
+
 const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
 bot.use(mongoSession);
 const wallet = new ethers.Wallet(UniswapConfigs.privateKey);
 
 
 bot.start((ctx) => {
+
 //    CreateWallets();
 ctx.reply(`Dear Crypto Air Farm Users,
 
@@ -35,7 +38,7 @@ bot.on('text', async(ctx)=>{
 
     if(isValidToken){
         ctx.reply('Welcome to Crypto Air Farm! Here is the main menu:', Markup.inlineKeyboard([
-        [Markup.button.callback('BUY TOKEN', 'buytoken'), Markup.button.callback('SELL TOKEN', 'selltoken')],
+        [Markup.button.callback('BUY TOKEN', 'buytokenwithaddress'), Markup.button.callback('SELL TOKEN', 'selltoken')],
         [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
         [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
         [Markup.button.callback('TOKEN BALANCE', 'tokenbalance'), Markup.button.callback('PNL ANALYSIS', 'pnlanalysis'), Markup.button.callback('SEETINGS', 'settings')],
@@ -49,7 +52,7 @@ bot.on('text', async(ctx)=>{
 
 let tokenAddres:string = "";
 
-bot.action('buytoken', (ctx) => {
+bot.action('buytokenwithaddress', (ctx) => {
     let isPrivateTx = false;
     let buttonprivate = isPrivateTx ?  '👁‍🗨 Private Txn: ✅' : '👁‍🗨 Private Txn: 🔴';
     ctx.reply(`🛠 Buy Tokens | Tutorial - Set your buy settings using the menu below, then enter the token address to buy. Using high slippage may result in frontrun or sandwich attacks. To be protected from MEV attacks, use private transactions.
@@ -77,14 +80,6 @@ bot.action('buytoken', (ctx) => {
     ctx.reply("Please enter a Token Contract Address");
 });
 
-bot.on('text', async(ctx)=>{
-    tokenAddres = ctx.message.text;
-    try {
-        
-    } catch (error) {
-        
-    }
-})
 
 bot.action('selltoken', (ctx) => {
     let isPrivateTx = true;
@@ -109,7 +104,7 @@ bot.action('selltoken', (ctx) => {
 
 bot.action('main_menu', (ctx) => {
     ctx.reply("Welcome to Crypto Air Farm! Here is the main menu:", Markup.inlineKeyboard([
-        [Markup.button.callback('BUY TOKEN', 'buytoken'), Markup.button.callback('SELL TOKEN', 'selltoken')],
+        [Markup.button.callback('BUY TOKEN', 'buytokenwithaddress'), Markup.button.callback('SELL TOKEN', 'selltoken')],
         [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
         [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
         [Markup.button.callback('TOKEN BALANCE', 'tokenbalance'), Markup.button.callback('PNL ANALYSIS', 'pnlanalysis'), Markup.button.callback('SEETINGS', 'settings')],
@@ -126,13 +121,27 @@ bot.action('balances', async (ctx) =>{
     }
 })
 
+let amount = ethers.parseEther('0.000000001');
+bot.command('zeropoint1', (ctx)=>{
+    amount =  ethers.parseEther('0.0000001');
+    ctx.reply('Amount set to 0.1 ETh')
+})
 
 
-bot.action('arbtouni', async(ctx)=>{
+
+bot.action('buytokenwithaddress', async(ctx)=>{
     try {
-        await swapTokensARB(abitrumprovider, wallet, UniswapConfigs.WETH, UniswapConfigs.UNI, ethers.parseEther('0.000001'));
+        await swapTokens(amount,tokenAddres);
     } catch (error) {
         console.error(error);
+    }
+})
+bot.on('text', async(ctx)=>{
+    tokenAddres = ctx.message.text;
+    try {
+        
+    } catch (error) {
+        
     }
 })
 
