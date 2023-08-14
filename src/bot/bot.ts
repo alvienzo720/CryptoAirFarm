@@ -9,6 +9,7 @@ import { sendMessage } from "../utils/telegram";
 import { verifyToken } from "../middleware/verifyToken";
 import {DBConn} from "../config/dbcon";
 import {session} from "telegraf"
+import { getBlockNumber, getEthPrice } from "../utils/ethPrice";
 
 
 export interface SessionContex  extends Context {
@@ -65,14 +66,17 @@ bot.on('text', async(ctx)=>{
 
 
 let tokenAddres:string = "";
+bot.action('buytokenwithaddress', async(ctx) => {
 
-bot.action('buytokenwithaddress', (ctx) => {
+ let ethPrice = await getEthPrice();
+ let blockNumber =  await getBlockNumber();
+
     let isPrivateTx = false;
     let buttonprivate = isPrivateTx ?  '👁‍🗨 Private Txn: ✅' : '👁‍🗨 Private Txn: 🔴';
     ctx.reply(`🛠 Buy Tokens | Tutorial - Set your buy settings using the menu below, then enter the token address to buy. Using high slippage may result in frontrun or sandwich attacks. To be protected from MEV attacks, use private transactions.
     -Buy Amount: the amt of ETH to spend 
     -Slippage: Definition
-⬩Gas: 24 GWEI ⬩Block: 17870583 ⬩ETH: $1833`, Markup.inlineKeyboard([
+⬩Gas:  GWEI ⬩Block: ${blockNumber} ⬩ETH: $${ethPrice}`, Markup.inlineKeyboard([
     [Markup.button.callback('🏘 Main Menu', 'main_menu'), Markup.button.callback('❌ Close', 'exit')],
     [Markup.button.callback(buttonprivate, 'private')],
     [Markup.button.callback('🛡 Fail Guard', 'failguard'), Markup.button.callback('👟 Frontrun', 'frontrun')],
@@ -81,7 +85,7 @@ bot.action('buytokenwithaddress', (ctx) => {
      Markup.button.callback('💳 W3', 'wallet3'),  Markup.button.callback('💳 W4', 'wallet4'),
      Markup.button.callback('💳 W5', 'wallet5') ], 
      [Markup.button.callback('BUY AMOUNT', 'nothing')],     
-    [Markup.button.callback('0.1 ETH', 'zeropoint1'),
+    [Markup.button.callback('0.1 ETH', 'zeropoint11'),
     Markup.button.callback('0.3 ETH', 'zeropoint3'),
     Markup.button.callback('0.5 ETH', 'zeropoint5')],
     [Markup.button.callback('1.0', 'oneeth'), Markup.button.callback('CUSTOM', 'customamount')],
@@ -91,7 +95,7 @@ bot.action('buytokenwithaddress', (ctx) => {
     Markup.button.callback('20% ETH', '20percent')],
     [Markup.button.callback('Custom', 'customslippage'), Markup.button.callback('Auto', 'autoslipage')],
     ]));
-    ctx.reply("Please enter a Token Contract Address");
+    // ctx.reply("Please enter a Token Contract Address");
 });
 
 
@@ -142,17 +146,9 @@ bot.command('zeropoint1', (ctx)=>{
 })
 
 
-// bot.on('text', async(ctx)=>{
-//     tokenAddres = ctx.message.text;
-//     try {
-        
-//     } catch (error) {
-        
-//     }
-// })
+bot.action('zeropoint11', async(ctx)=>{
 
 tokenAddres = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
-bot.action('buytokenwithaddress', async(ctx)=>{
 
     try {
         await swapTokens(amount,tokenAddres);
