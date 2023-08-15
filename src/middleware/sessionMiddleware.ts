@@ -7,41 +7,32 @@ interface ContextType {
         id?: number;
     };
     session?: any;
-
-    walletaddress?:string
+    walletaddress?: string;
 }
 
 export async function mongoSession(ctx: ContextType, next: NextFunction) {
+    if (!ctx.from || !ctx.from.id) {
+        console.log("No ctx.from or ctx.from.id present.");
+        await next();
+        return;
+    }
+
+    const userKey = String(ctx.from.id);
+
     try {
-        if (!ctx.from || !ctx.from.id) {
-            console.log("No ctx.from or ctx.from.id present.");
-            await next();
-            return;
-        }
-
-        const userKey = String(ctx.from.id);
-        const sessionDoc = await SessionModel.findOne({ userKey });
-
-        let user = await UserModel.findOne({ userId: ctx.from.id });
-
-        if (!user) {
-            console.log(`User with ID ${ctx.from.id} not found. Creating...`);
-            user = new UserModel({
+        // Get or Create User
+        let user = await UserModel.findOneAndUpdate(
+            { userId: ctx.from.id },
+            { $setOnInsert: { 
                 userId: ctx.from.id,
                 createdDate: new Date(),
-                walletaddress:ctx.walletaddress || ')XDRGYYTDDGSG'
-            });
+                walletaddress: ctx.walletaddress || ')XDRGYYTDDGSG'
+            }},
+            { upsert: true, new: true }
+        );
 
-            try {
-                await user.save();
-                // console.log(`User with ID ${ctx.from.id} created.`);
-            } catch (userSaveError) {
-                // console.error(`Error saving user with ID ${ctx.from.id}:`, userSaveError);
-            }
-
-        } else {
-            // console.log(`User with ID ${ctx.from.id} exists.`);
-        }
+        // Handling Session
+        let sessionDoc = await SessionModel.findOne({ userKey });
 
         ctx.session = sessionDoc ? sessionDoc.sessionData : {};
 
@@ -49,15 +40,9 @@ export async function mongoSession(ctx: ContextType, next: NextFunction) {
 
         if (sessionDoc) {
             await SessionModel.findOneAndUpdate({ userKey }, { sessionData: ctx.session });
-            // console.log(`Session for user ID ${ctx.from.id} updated.`);
         } else {
             const newSession = new SessionModel({ userKey, sessionData: ctx.session });
-            try {
-                await newSession.save();
-                // console.log(`Session for user ID ${ctx.from.id} created.`);
-            } catch (sessionSaveError) {
-                // console.error(`Error saving session for user ID ${ctx.from.id}:`, sessionSaveError);
-            }
+            await newSession.save();
         }
 
     } catch (error) {

@@ -1,15 +1,13 @@
 import { Markup, Telegraf, Context } from "telegraf";
-import { ConfigParams, PRIVATE_KEYS, UniswapConfigs, abitrumprovider, uniSwapprovider } from "../config";
-import { CreateWallets, walletBalance } from "../controllers";
+import { ConfigParams, PRIVATE_KEYS, UniswapConfigs } from "../config";
+import {  walletBalance } from "../controllers";
 import { swapTokens } from "../controllers/uniswap/swapTokensUniswap";
 import { ethers } from "ethers";
-import { swapTokensARB } from "../controllers/abitrum/swapTokensAbitrum";
 import {mongoSession} from "../middleware/sessionMiddleware"
-import { sendMessage } from "../utils/telegram";
 import { verifyToken } from "../middleware/verifyToken";
-import {DBConn} from "../config/dbcon";
-import {session} from "telegraf"
+import {isAuthenticated}  from "../middleware/authMiddleware";
 import { getBlockNumber, getEthPrice } from "../utils/ethPrice";
+
 
 
 export interface SessionContex  extends Context {
@@ -17,17 +15,10 @@ export interface SessionContex  extends Context {
 
 }
 
-const bot =  new Telegraf(ConfigParams.BOT_TOKEN);
-
+const bot =  new Telegraf<SessionContex>(ConfigParams.BOT_TOKEN);
 bot.use(mongoSession);
-
-
-const wallet = new ethers.Wallet(UniswapConfigs.privateKey);
-
-
+bot.use(isAuthenticated)
 bot.start((ctx) => {
-
-
 
 //    CreateWallets();
 ctx.reply(`Dear Crypto Air Farm Users,
@@ -46,20 +37,23 @@ ctx.reply("Please enter the token from the website to continue");
 
 bot.on('text', async(ctx)=>{
 
-    const token =  ctx.message.text;
-    const isValidToken =  await verifyToken(token);
-
-
-    if(isValidToken){
-        
-        ctx.reply('Welcome to Crypto Air Farm! Here is the main menu:', Markup.inlineKeyboard([
+    if(ctx.session.isAuthenticated){
+         ctx.reply('Welcome to Crypto Air Farm! Here is the main menu:', Markup.inlineKeyboard([
         [Markup.button.callback('BUY TOKEN', 'buytokenwithaddress'), Markup.button.callback('SELL TOKEN', 'selltoken')],
         [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
         [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
         [Markup.button.callback('TOKEN BALANCE', 'tokenbalance'), Markup.button.callback('PNL ANALYSIS', 'pnlanalysis'), Markup.button.callback('SEETINGS', 'settings')],
     ]));
+
+    }else {
+         const token =  ctx.message.text;
+        const isValidToken =  await verifyToken(token);
+         if(isValidToken){
+            ctx.session.isAuthenticated = true;
+            ctx.reply("Welcome to Crypto Air Farm! ... ");
     }else {
         ctx.reply('The token you entered is invalid. Please check your token and try again.')
+    }
     }
 })
 
@@ -157,11 +151,7 @@ tokenAddres = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
     }
 })
 
-
 bot.command('exit', async(ctx)=>{
     await ctx.leaveChat();
 })
-
-
-
 export {bot}
