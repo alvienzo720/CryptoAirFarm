@@ -8,16 +8,11 @@ import { verifyToken } from "../middleware/verifyToken";
 import {isAuthenticated}  from "../middleware/authMiddleware";
 import { getBlockNumber, getEthPrice } from "../utils/ethPrice";
 
-
-
 export interface SessionContex  extends Context {
     session:any
-
 }
-
 const bot =  new Telegraf<SessionContex>(ConfigParams.BOT_TOKEN);
 bot.use(mongoSession);
-bot.use(isAuthenticated)
 bot.start((ctx) => {
 
 //    CreateWallets();
@@ -36,24 +31,22 @@ ctx.reply("Please enter the token from the website to continue");
 });
 
 bot.on('text', async(ctx)=>{
+    
 
-    if(ctx.session.isAuthenticated){
-         ctx.reply('Welcome to Crypto Air Farm! Here is the main menu:', Markup.inlineKeyboard([
+    const token =  ctx.message.text;
+    const isValidToken =  await verifyToken(token);
+
+
+    if(isValidToken){
+        
+        ctx.reply('Welcome to Crypto Air Farm! Here is the main menu:', Markup.inlineKeyboard([
         [Markup.button.callback('BUY TOKEN', 'buytokenwithaddress'), Markup.button.callback('SELL TOKEN', 'selltoken')],
         [Markup.button.callback('BUY LIMIT', 'buylimit'), Markup.button.callback('SELL LIMIT', 'selllimit')],
         [Markup.button.callback('MIIROR SNIPER', 'mirrorsniper'), Markup.button.callback('METHOD SNIPER', 'methodsniper')],
         [Markup.button.callback('TOKEN BALANCE', 'tokenbalance'), Markup.button.callback('PNL ANALYSIS', 'pnlanalysis'), Markup.button.callback('SEETINGS', 'settings')],
     ]));
-
-    }else {
-         const token =  ctx.message.text;
-        const isValidToken =  await verifyToken(token);
-         if(isValidToken){
-            ctx.session.isAuthenticated = true;
-            ctx.reply("Welcome to Crypto Air Farm! ... ");
     }else {
         ctx.reply('The token you entered is invalid. Please check your token and try again.')
-    }
     }
 })
 

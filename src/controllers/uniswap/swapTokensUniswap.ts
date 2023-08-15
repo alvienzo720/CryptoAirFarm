@@ -33,12 +33,12 @@ export async function swapTokens(
     );
 
     console.log(`Transaction Hash ${tx.hash}`);
-     let message = `Token ETH Swapped Successfully`
+     let message = `Token ETH Bought Successfully`
         message += `\n Hash: \`${tx.hash}\``
         message += `\n Value: \`${ethers.formatEther(tx.value)}\``
         message += `\n To: \` ${tx.to}\``
         message += `\n Nonce: \`${tx.nonce}\``
-         message += `\n View NFT at :https://sepolia.etherscan.io/tx/${tx.hash}`
+         message += `\n View Txn at :https://sepolia.etherscan.io/tx/${tx.hash}`
          console.log("Message",message)
         sendMessage(message);
 
