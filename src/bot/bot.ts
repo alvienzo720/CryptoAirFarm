@@ -5,7 +5,6 @@ import { swapTokens } from "../controllers/uniswap/swapTokensUniswap";
 import { ethers } from "ethers";
 import {mongoSession} from "../middleware/sessionMiddleware"
 import { verifyToken } from "../middleware/verifyToken";
-import {isAuthenticated}  from "../middleware/authMiddleware";
 import { getBlockNumber, getEthPrice } from "../utils/ethPrice";
 
 export interface SessionContex  extends Context {
@@ -86,13 +85,16 @@ bot.action('buytokenwithaddress', async(ctx) => {
 });
 
 
-bot.action('selltoken', (ctx) => {
+bot.action('selltoken', async(ctx) => {
+
+     let ethPrice = await getEthPrice();
+    let blockNumber =  await getBlockNumber();
     let isPrivateTx = true;
     let buttonprivate = isPrivateTx ?  '👁‍🗨 Private Txn: ✅' : '👁‍🗨 Private Txn: 🔴';
     ctx.reply(`🛠 Sell Tokens | Tutorial - Set your sell settings in the menu below and then enter the lines numbers of the tokens you wish to sell. Selling using high slippage can result in being frontrun or sandwiched. Use private transactions to avoid sandwich attacks.
    •Sell Amount: the % of your bag you wish to sell
    •Slippage: Definition
-⬩Gas: 26 GWEI ⬩Block: 17870778 ⬩ETH: $1832`, Markup.inlineKeyboard([
+⬩Gas: 26 GWEI ⬩Block: ${blockNumber} ⬩ETH: ${ethPrice}`, Markup.inlineKeyboard([
     [Markup.button.callback('🏘 Main Menu', 'main_menu'), Markup.button.callback('❌ Close', 'exit')],
     [Markup.button.callback(buttonprivate, 'private')],
     [Markup.button.callback('🛡 Fail Guard', 'failguard'), Markup.button.callback('👟 Frontrun', 'frontrun')],
@@ -126,22 +128,63 @@ bot.action('balances', async (ctx) =>{
     }
 })
 
-let amount = ethers.parseEther('0.000000001');
+
 bot.command('zeropoint1', (ctx)=>{
-    amount =  ethers.parseEther('0.0000001');
+    
+    let amount =  ethers.parseEther('0.0000001');
     ctx.reply('Amount set to 0.1 ETh')
 })
-
+tokenAddres = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 
 bot.action('zeropoint11', async(ctx)=>{
+let amount = ethers.parseEther('0.000000001');
 
-tokenAddres = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 
     try {
         await swapTokens(amount,tokenAddres);
     } catch (error) {
         console.error(error);
     }
+})
+
+bot.action('zeropoint3',async(ctx)=>{
+    const amount = ethers.parseEther('00000000.3');
+    try {
+        await swapTokens(amount, tokenAddres);
+    } catch (error) {
+        console.log(error);
+    }
+
+bot.action('zeropoint5', async(ctx)=>{
+    const amount = ethers.parseEther('0.00000005');
+    try {
+        await swapTokens(amount, tokenAddres);
+    } catch (error) {
+        console.log(error);
+        
+    }
+})
+
+bot.action('', async(ctx)=>{
+    const amount = ethers.parseEther('0.0001');
+    try {
+        await  swapTokens(amount, tokenAddres)
+    } catch (error) {
+        
+    }
+})
+
+bot.action('custom', async(ctx)=>{
+    let amount = ""
+    try {
+        await swapTokens(amount, tokenAddres);
+    } catch (error) {
+        console.log(error);
+        
+    }
+})
+
+
 })
 
 bot.command('exit', async(ctx)=>{
